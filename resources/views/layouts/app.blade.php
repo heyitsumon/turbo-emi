@@ -84,6 +84,7 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
     <div class="container-fluid">
 
+        <h1>hello today </h1>
         <!-- Logo -->
         <a class="navbar-brand fw-bold text-primary" href="{{ route('dashboard') }}">
             MyAdmin

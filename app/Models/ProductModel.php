@@ -12,6 +12,7 @@ class ProductModel extends Model
      protected $fillable = [
          'product_id',
          'model_name',
+         'qty',
      ];
  
      public function product()

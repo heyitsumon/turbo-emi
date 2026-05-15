@@ -17,8 +17,23 @@
                 <a wire:navigate href="{{ route('products.model') }}" class="btn btn-ghost btn-sm">Products Model</a>
                 <a wire:navigate href="{{ route('users.index') }}" class="btn btn-ghost btn-sm">Users</a>
                 <a wire:navigate href="{{ route('roles.index') }}" class="btn btn-ghost btn-sm">Roles</a>
-            </div>
 
+                <div class="dropdown dropdown-end">
+                    <label tabindex="0" class="btn btn-sm btn-outline">Theme</label>
+                    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
+                        @for ($i = 1; $i <= 12; $i++)
+                            <li>
+                                <button type="button" class="btn btn-ghost justify-start theme-selector"
+                                        data-theme="theme-{{ $i }}">
+                                    <span class="w-4 h-4 rounded-full mr-2"
+                                          style="background: var(--theme-{{ $i }});"></span>
+                                    Theme {{ $i }}
+                                </button>
+                            </li>
+                        @endfor
+                    </ul>
+                </div>
+            </div>
 
 
             <!-- Mobile Menu Button -->
@@ -45,17 +60,34 @@
             <li><a wire:navigate href="{{ route('products.model') }}">Products Model</a></li>
             <li><a wire:navigate href="{{ route('users.index') }}">Users</a></li>
             <li><a wire:navigate href="{{ route('roles.index') }}">Roles</a></li>
-
+            <li class="border-t border-base-200 mt-2 pt-2">
+                <span class="text-base-content text-sm font-semibold">Theme</span>
+            </li>
+            @for ($i = 1; $i <= 12; $i++)
+                <li>
+                    <button type="button" class="btn btn-ghost justify-start theme-selector w-full"
+                            data-theme="theme-{{ $i }}">
+                        <span class="w-4 h-4 rounded-full mr-2"
+                              style="background: var(--theme-{{ $i }});"></span>
+                        Theme {{ $i }}
+                    </button>
+                </li>
+            @endfor
         </ul>
     </div>
 </nav>
 
 <script>
-    // Mobile menu toggle
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenuContent = document.getElementById('mobile-menu-content');
+    if (!window.__navbarMenuInitialized) {
+        window.__navbarMenuInitialized = true;
 
-    mobileMenuButton.addEventListener('click', () => {
-        mobileMenuContent.classList.toggle('hidden');
-    });
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenuContent.classList.toggle('hidden');
+            });
+        }
+    }
 </script>

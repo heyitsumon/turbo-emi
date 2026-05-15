@@ -52,7 +52,9 @@ class PurchaseController extends Controller
 
     public function getModels($productId)
     {
-        $models = ProductModel::where('product_id', $productId)->get(['id', 'model_name']);
+        $models = ProductModel::where('product_id', $productId)
+            ->get(['id', 'model_name', 'qty']);
+
         return response()->json($models);
     }
 
@@ -90,12 +92,24 @@ class PurchaseController extends Controller
         $request->validate([
             'customer_id'  => 'required|exists:customers,id',
             'product_id'   => 'required|exists:products,id',
-            'model_id'     => 'required',
+            'model_id'     => 'required|exists:product_models,id',
             'sales_price'  => 'required|numeric',
             'down_price'   => 'required|numeric',
             'net_price'    => 'required|numeric',
             'emi_plan'     => 'required|integer|min:1',
         ]);
+
+        $productModel = ProductModel::where('id', $request->model_id)
+            ->where('product_id', $request->product_id)
+            ->first();
+
+        if (! $productModel) {
+            return back()->withErrors(['model_id' => 'Selected model is invalid for this product.']);
+        }
+
+        if ($productModel->qty <= 0) {
+            return back()->withErrors(['model_id' => 'Selected model is out of stock.']);
+        }
 
         DB::beginTransaction();
 
@@ -110,6 +124,9 @@ class PurchaseController extends Controller
                 'net_price' => $request->net_price,
                 'emi_plan' => $request->emi_plan,
             ]);
+
+            // Decrement stock for the selected product model
+            $productModel->decrement('qty', 1);
 
             // Total due = net - down
             $totalDue = $purchase->net_price - $purchase->down_price;

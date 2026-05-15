@@ -29,6 +29,11 @@
             <input type="text" name="model_name" class="form-control" value="{{ $model->model_name }}" required>
         </div>
 
+        <div class="mb-3">
+            <label for="qty">পরিমাণ</label>
+            <input type="number" name="qty" class="form-control" value="{{ $model->qty ?? 0 }}" min="0" required>
+        </div>
+
         <button class="btn btn-primary">আপডেট করুন</button>
     </form>
 </div>

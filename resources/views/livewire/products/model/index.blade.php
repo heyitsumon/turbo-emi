@@ -33,6 +33,7 @@
                     <th>#</th>
                     <th>Product</th>
                     <th>Model Name</th>
+                    <th>Quantity</th>
                     <th class="text-right">Actions</th>
                 </tr>
             </thead>
@@ -42,6 +43,7 @@
                     <td>{{ $models->firstItem() + $key }}</td>
                     <td>{{ $model->product->product_name ?? '-' }}</td>
                     <td>{{ $model->model_name }}</td>
+                    <td>{{ $model->qty }}</td>
                     <td class="flex justify-end gap-2">
                         <button wire:click="edit({{ $model->id }})" class="btn btn-xs btn-warning">Edit</button>
                         <button wire:click="delete({{ $model->id }})"
@@ -81,6 +83,10 @@
                 <input type="text" wire:model="model_name" placeholder="Model Name"
                        class="input input-bordered w-full mb-2">
                 @error('model_name') <span class="text-error">{{ $message }}</span> @enderror
+
+                <input type="number" wire:model="qty" placeholder="Quantity"
+                       class="input input-bordered w-full mb-2" min="0">
+                @error('qty') <span class="text-error">{{ $message }}</span> @enderror
 
                 <div class="modal-action">
                     @if($model_id)

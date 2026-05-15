@@ -43,9 +43,10 @@ class ProductModelController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'model_name' => 'required|string|max:255',
+            'qty' => 'required|integer|min:0',
         ]);
 
-        ProductModel::create($request->all());
+        ProductModel::create($request->only(['product_id', 'model_name', 'qty']));
 
         return redirect()->back()->with('success', 'Product model created successfully.');
     }
@@ -79,13 +80,11 @@ class ProductModelController extends Controller
         $request->validate([
             'product_id' => 'required|exists:products,id',
             'model_name' => 'required|string|max:255',
+            'qty' => 'required|integer|min:0',
         ]);
 
         $model = ProductModel::findOrFail($id);
-        $model->update([
-            'product_id' => $request->product_id,
-            'model_name' => $request->model_name,
-        ]);
+        $model->update($request->only(['product_id', 'model_name', 'qty']));
 
         return redirect()->route('models.index')->with('success', 'মডেল সফলভাবে আপডেট করা হয়েছে।');
     }

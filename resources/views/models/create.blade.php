@@ -27,6 +27,11 @@
             <input type="text" name="model_name" class="form-control" required>
         </div>
 
+        <div class="mb-3">
+            <label for="qty">Quantity</label>
+            <input type="number" name="qty" class="form-control" min="0" value="0" required>
+        </div>
+
         <button class="btn btn-primary">Add Model</button>
     </form>
 </div>

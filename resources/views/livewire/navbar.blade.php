@@ -55,6 +55,22 @@
                         User Roles
                     </a>
                 @endcan
+
+                <div class="dropdown dropdown-end">
+                    <label tabindex="0" class="btn btn-sm btn-outline mr-2">Theme</label>
+                    <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
+                        @for ($i = 1; $i <= 12; $i++)
+                            <li>
+                                <button type="button" class="btn btn-ghost justify-start theme-selector"
+                                        data-theme="theme-{{ $i }}">
+                                    <span class="w-4 h-4 rounded-full mr-2"
+                                          style="background: var(--theme-{{ $i }});"></span>
+                                    Theme {{ $i }}
+                                </button>
+                            </li>
+                        @endfor
+                    </ul>
+                </div>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -96,15 +112,72 @@
                     </a>
                 </li>
             @endcan
-            <!-- add others the same way -->
+            <li class="border-t border-base-200 mt-2 pt-2">
+                <span class="text-sm font-semibold">Theme</span>
+            </li>
+            @for ($i = 1; $i <= 12; $i++)
+                <li>
+                    <button type="button" class="btn btn-ghost justify-start theme-selector w-full"
+                            data-theme="theme-{{ $i }}">
+                        <span class="w-4 h-4 rounded-full mr-2"
+                              style="background: var(--theme-{{ $i }});"></span>
+                        Theme {{ $i }}
+                    </button>
+                </li>
+            @endfor
         </ul>
     </div>
 </nav>
 
 <script>
-    const mobileMenuButton = document.getElementById('mobile-menu-button');
-    const mobileMenuContent = document.getElementById('mobile-menu-content');
-    mobileMenuButton.addEventListener('click', () => {
-        mobileMenuContent.classList.toggle('hidden');
-    });
+    (function() {
+        const mobileMenuButton = document.getElementById('mobile-menu-button');
+        const mobileMenuContent = document.getElementById('mobile-menu-content');
+        const themeButtons = document.querySelectorAll('.theme-selector');
+
+        if (mobileMenuButton) {
+            mobileMenuButton.addEventListener('click', () => {
+                mobileMenuContent.classList.toggle('hidden');
+            });
+        }
+
+        const getContrastColor = hex => {
+            const normalized = hex.trim().replace('#', '');
+            const r = parseInt(normalized.substring(0, 2), 16);
+            const g = parseInt(normalized.substring(2, 4), 16);
+            const b = parseInt(normalized.substring(4, 6), 16);
+            const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+            return luminance > 0.6 ? '#111827' : '#ffffff';
+        };
+
+        const applyPalette = selectedPalette => {
+            const value = `var(--${selectedPalette})`;
+            const paletteColor = getComputedStyle(document.documentElement).getPropertyValue(`--${selectedPalette}`).trim() || '#2563eb';
+            const themeTextColor = getContrastColor(paletteColor);
+            document.documentElement.style.setProperty('--theme', value);
+            document.documentElement.style.setProperty('--theme-bg', value);
+            document.documentElement.style.setProperty('--theme-text', themeTextColor);
+            themeButtons.forEach(el => {
+                el.classList.toggle('active', el.dataset.theme === selectedPalette);
+            });
+            localStorage.setItem('site-theme-palette', selectedPalette);
+        };
+
+        const initThemeControls = () => {
+            themeButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    applyPalette(this.dataset.theme);
+                });
+            });
+
+            const storedPalette = localStorage.getItem('site-theme-palette');
+            applyPalette(storedPalette || 'theme-1');
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initThemeControls);
+        } else {
+            initThemeControls();
+        }
+    })();
 </script>

@@ -66,6 +66,7 @@ Route::post('/customers/create', [CustomerController::class, 'store'])->name('cu
 Route::get('/customers/{id}/emi-plans', [Index::class, 'customerEmiPlans'])->name('customers.emi_plans')->middleware('auth');
 
 Route::resource('purchases', PurchaseController::class);
+Route::resource('models', ProductModelController::class);
 
 // Route::get('/purchases', PurchasesIndex::class)->name('purchases.index');
 

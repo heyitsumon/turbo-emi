@@ -14,6 +14,7 @@ class Index extends Component
     public $model_id;
     public $product_id;
     public $model_name;
+    public $qty = 0;
     public $isOpen = false;
     public $search = '';
     public $perPage = 10;
@@ -23,6 +24,7 @@ class Index extends Component
     protected $rules = [
         'product_id' => 'required|exists:products,id',
         'model_name' => 'required|string|max:255',
+        'qty' => 'required|integer|min:0',
     ];
 
     public function mount()
@@ -69,6 +71,7 @@ class Index extends Component
         $this->model_id = null;
         $this->product_id = '';
         $this->model_name = '';
+        $this->qty = 0;
         $this->closeModal();
     }
 
@@ -79,6 +82,7 @@ class Index extends Component
         ProductModel::create([
             'product_id' => $this->product_id,
             'model_name' => $this->model_name,
+            'qty' => $this->qty,
         ]);
 
         session()->flash('success', 'Product model created successfully.');
@@ -91,6 +95,7 @@ class Index extends Component
         $this->model_id = $id;
         $this->product_id = $model->product_id;
         $this->model_name = $model->model_name;
+        $this->qty = $model->qty;
 
         $this->openModal();
     }
@@ -104,6 +109,7 @@ class Index extends Component
             $model->update([
                 'product_id' => $this->product_id,
                 'model_name' => $this->model_name,
+                'qty' => $this->qty,
             ]);
 
             session()->flash('success', 'Product model updated successfully.');

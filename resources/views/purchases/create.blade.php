@@ -47,9 +47,24 @@
                 @enderror
             </div>
 
+            <div class="mb-4" id="inventory_section" style="display: none;">
+                <h5 class="mb-2">Available Model Inventory</h5>
+                <div class="table-responsive">
+                    <table class="table table-bordered">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Model</th>
+                                <th>Quantity</th>
+                            </tr>
+                        </thead>
+                        <tbody id="inventory_table_body"></tbody>
+                    </table>
+                </div>
+            </div>
+
             <div class="mb-3" id="model_section" style="display: none;">
                 <label for="model_id" class="form-label">মডেল (Model)</label>
-                <select id="model_id" name="model_id" class="form-select">
+                <select id="model_id" name="model_id" class="form-select" required>
                     <option value="">মডেল নির্বাচন করুন</option>
                 </select>
                 @error('model_id')
@@ -138,6 +153,7 @@
                 const productId = $(this).val();
                 $('#model_id').empty().append('<option value="">লোড হচ্ছে...</option>');
                 $('#model_section').hide();
+                $('#inventory_section').hide();
 
                 if (productId) {
                     $.ajax({
@@ -147,21 +163,30 @@
                             if (models.length > 0) {
                                 $('#model_id').empty().append(
                                     '<option value="">মডেল নির্বাচন করুন</option>');
+                                $('#inventory_table_body').empty();
                                 models.forEach(model => {
                                     $('#model_id').append(
-                                        `<option value="${model.id}">${model.model_name}</option>`
+                                        `<option value="${model.id}">${model.model_name} (Qty: ${model.qty})</option>`
+                                    );
+                                    $('#inventory_table_body').append(
+                                        `<tr><td>${model.model_name}</td><td>${model.qty}</td></tr>`
                                     );
                                 });
-                                $('#model_section').show(); // ✅ Show section
+                                $('#model_section').show();
+                                $('#inventory_section').show();
                             } else {
                                 $('#model_id').empty().append(
                                     '<option value="">কোন মডেল পাওয়া যায়নি</option>');
+                                $('#inventory_table_body').empty();
+                                $('#inventory_section').hide();
                             }
                         },
                         error: function(xhr) {
                             console.error('Model load error:', xhr.responseText);
                             $('#model_id').empty().append(
                                 '<option value="">লোড করতে ব্যর্থ</option>');
+                            $('#inventory_table_body').empty();
+                            $('#inventory_section').hide();
                         }
                     });
                 }

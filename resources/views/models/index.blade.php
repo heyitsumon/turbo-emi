@@ -20,6 +20,7 @@
                     <th>#</th>
                     <th>পণ্যের নাম</th>
                     <th>মডেল নাম</th>
+                    <th>পরিমাণ</th>
                     <th>তৈরির সময়</th>
                     <th>অ্যাকশন</th>
                 </tr>
@@ -30,6 +31,7 @@
                         <td>{{ $loop->iteration }}</td>
                         <td>{{ $model->product->product_name }}</td>
                         <td>{{ $model->model_name }}</td>
+                        <td>{{ $model->qty }}</td>
                         <td>{{ $model->created_at->format('d-m-Y') }}</td>
                         <td>
 

@@ -22,9 +22,11 @@ class ProductModelController extends Controller
      */
     public function index()
     {
-        $models = ProductModel::with('product')->latest()->get();
+        $models = ProductModel::with('product')
+            ->withCount('purchases')
+            ->latest()
+            ->get();
 
-        // return $models;
         return view('models.index', compact('models'));
     }
 
@@ -46,7 +48,11 @@ class ProductModelController extends Controller
             'qty' => 'required|integer|min:0',
         ]);
 
-        ProductModel::create($request->only(['product_id', 'model_name', 'qty']));
+        ProductModel::create([
+            'product_id' => (int) $request->input('product_id'),
+            'model_name' => $request->input('model_name'),
+            'qty' => (int) $request->input('qty', 0),
+        ]);
 
         return redirect()->back()->with('success', 'Product model created successfully.');
     }
@@ -84,7 +90,11 @@ class ProductModelController extends Controller
         ]);
 
         $model = ProductModel::findOrFail($id);
-        $model->update($request->only(['product_id', 'model_name', 'qty']));
+        $model->update([
+            'product_id' => (int) $request->input('product_id'),
+            'model_name' => $request->input('model_name'),
+            'qty' => (int) $request->input('qty', 0),
+        ]);
 
         return redirect()->route('models.index')->with('success', 'মডেল সফলভাবে আপডেট করা হয়েছে।');
     }

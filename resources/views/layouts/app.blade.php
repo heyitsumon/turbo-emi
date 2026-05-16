@@ -18,38 +18,23 @@
 
     <style>
         :root {
-            --theme-1: #1d4ed8;
-            --theme-2: #0ea5e9;
-            --theme-3: #10b981;
-            --theme-4: #f97316;
-            --theme-5: #ef4444;
-            --theme-6: #a855f7;
-            --theme-7: #ec4899;
-            --theme-8: #facc15;
-            --theme-9: #0f766e;
-            --theme-10: #7c3aed;
-            --theme-11: #14b8a6;
-            --theme-12: #f43f5e;
-            --theme: var(--theme-1);
-            --theme-text: #ffffff;
             --bg: #f8fafc;
-            --theme-bg: var(--theme-1);
-            --surface: rgba(255, 255, 255, 0.95);
-            --surface-soft: rgba(255, 255, 255, 0.98);
+            --surface: #ffffff;
+            --surface-soft: #f1f5f9;
             --text: #111827;
             --text-muted: #475569;
             --border: #cbd5e1;
             --shadow: 0 14px 45px rgba(15, 23, 42, 0.08);
 
-            --bs-primary: var(--theme);
-            --bs-primary-hover: #1e40af;
-            --bs-success: var(--theme-3);
+            --bs-primary: #2563eb;
+            --bs-primary-hover: #1d4ed8;
+            --bs-success: #10b981;
             --bs-success-hover: #0f766e;
-            --bs-info: var(--theme-2);
+            --bs-info: #0ea5e9;
             --bs-info-hover: #0284c7;
-            --bs-warning: var(--theme-4);
+            --bs-warning: #f59e0b;
             --bs-warning-hover: #c2410c;
-            --bs-danger: var(--theme-5);
+            --bs-danger: #ef4444;
             --bs-danger-hover: #b91c1c;
         }
 
@@ -78,7 +63,7 @@
 
         .nav-link.active,
         .nav-link:hover {
-            color: var(--theme) !important;
+            color: var(--bs-primary) !important;
         }
 
         .btn-primary,
@@ -86,14 +71,14 @@
         .text-primary,
         .border-primary {
             color: #fff !important;
-            background-color: var(--theme) !important;
-            border-color: var(--theme) !important;
+            background-color: var(--bs-primary) !important;
+            border-color: var(--bs-primary) !important;
         }
 
         .btn-outline-secondary:hover {
             background: var(--surface-soft);
-            border-color: var(--theme);
-            color: var(--theme);
+            border-color: var(--bs-primary);
+            color: var(--bs-primary);
         }
 
         .btn {
@@ -108,12 +93,12 @@
 
         .btn-outline-secondary:hover {
             background: var(--surface-soft);
-            border-color: var(--theme);
-            color: var(--theme);
+            border-color: var(--bs-primary);
+            color: var(--bs-primary);
         }
 
         .scrolling-notices {
-            background: linear-gradient(110deg, var(--theme), var(--theme-4));
+            background: linear-gradient(110deg, var(--bs-primary), #f59e0b);
             overflow: hidden;
             white-space: nowrap;
             padding: 0.65rem 0;
@@ -254,23 +239,6 @@
                 @endcan
 
                 <li class="nav-item dropdown ms-lg-3">
-                    <button class="btn btn-outline-secondary btn-sm dropdown-toggle" id="themeMenu"
-                            data-bs-toggle="dropdown" aria-expanded="false">
-                        Theme
-                    </button>
-                    <ul class="dropdown-menu dropdown-menu-end py-2" aria-labelledby="themeMenu">
-                        @for ($i = 1; $i <= 12; $i++)
-                            <li>
-                                <button type="button" class="dropdown-item theme-selector d-flex align-items-center gap-2"
-                                        data-theme="theme-{{ $i }}">
-                                    <span class="theme-swatch rounded-circle border"
-                                          style="width: 18px; height: 18px; background: var(--theme-{{ $i }});"></span>
-                                    Theme {{ $i }}
-                                </button>
-                            </li>
-                        @endfor
-                    </ul>
-                </li>
             </ul>
         </div>
     </div>
@@ -299,53 +267,6 @@
     </footer>
 
     <!-- Scripts -->
-    <script>
-        (function() {
-            const storedPalette = localStorage.getItem('site-theme-palette');
-            const palette = storedPalette || 'theme-1';
-
-            const getContrastColor = hex => {
-                const normalized = hex.trim().replace('#', '');
-                const r = parseInt(normalized.substring(0, 2), 16);
-                const g = parseInt(normalized.substring(2, 4), 16);
-                const b = parseInt(normalized.substring(4, 6), 16);
-                const luminance = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
-                return luminance > 0.6 ? '#111827' : '#ffffff';
-            };
-
-            const applyPalette = selectedPalette => {
-                const value = `var(--${selectedPalette})`;
-                const paletteColor = getComputedStyle(document.documentElement).getPropertyValue(`--${selectedPalette}`).trim() || '#2563eb';
-                const themeTextColor = getContrastColor(paletteColor);
-                document.documentElement.style.setProperty('--theme', value);
-                document.documentElement.style.setProperty('--bg', value);
-                document.documentElement.style.setProperty('--theme-bg', value);
-                document.documentElement.style.setProperty('--theme-text', themeTextColor);
-                document.querySelectorAll('.theme-selector').forEach(el => {
-                    el.classList.toggle('active', el.dataset.theme === selectedPalette);
-                });
-                localStorage.setItem('site-theme-palette', selectedPalette);
-            };
-
-            const initThemeControls = () => {
-                document.querySelectorAll('.theme-selector').forEach(button => {
-                    button.addEventListener('click', function() {
-                        const selected = this.dataset.theme;
-                        if (selected) {
-                            applyPalette(selected);
-                        }
-                    });
-                });
-            };
-
-            applyPalette(palette);
-            if (document.readyState !== 'loading') {
-                initThemeControls();
-            } else {
-                document.addEventListener('DOMContentLoaded', initThemeControls);
-            }
-        })();
-    </script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     @stack('scripts')

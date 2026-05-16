@@ -53,6 +53,7 @@ class PurchaseController extends Controller
     public function getModels($productId)
     {
         $models = ProductModel::where('product_id', $productId)
+            ->where('qty', '>', 0)
             ->get(['id', 'model_name', 'qty']);
 
         return response()->json($models);

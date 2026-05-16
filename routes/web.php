@@ -71,7 +71,7 @@ Route::resource('models', ProductModelController::class);
 // Route::get('/purchases', PurchasesIndex::class)->name('purchases.index');
 
 Route::get('pdf', [PurchaseController::class, 'getpdf'])->name('pdf');
-Route::get('/purchases/models/{productId}', [PurchaseController::class, 'getModels']);
+Route::get('/purchases/models/{productId}', [PurchaseController::class, 'getModels'])->name('purchases.models');
 Route::get('/autocomplete', [PurchaseController::class, 'autocomplete'])->name('autocomplete');
 
 Route::resource('installments', InstallmentController::class);

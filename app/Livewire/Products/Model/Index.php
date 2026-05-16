@@ -40,6 +40,7 @@ class Index extends Component
     public function render()
     {
         $models = ProductModel::with('product')
+            ->withCount('purchases')
             ->whereHas('product', function($query){
                 $query->where('product_name', 'like', "%{$this->search}%");
             })
@@ -80,9 +81,9 @@ class Index extends Component
         $this->validate();
 
         ProductModel::create([
-            'product_id' => $this->product_id,
+            'product_id' => (int) $this->product_id,
             'model_name' => $this->model_name,
-            'qty' => $this->qty,
+            'qty' => (int) $this->qty,
         ]);
 
         session()->flash('success', 'Product model created successfully.');
@@ -106,10 +107,17 @@ class Index extends Component
 
         if ($this->model_id) {
             $model = ProductModel::find($this->model_id);
+
+            if (! $model) {
+                session()->flash('error', 'Product model not found.');
+                $this->resetInputFields();
+                return;
+            }
+
             $model->update([
-                'product_id' => $this->product_id,
+                'product_id' => (int) $this->product_id,
                 'model_name' => $this->model_name,
-                'qty' => $this->qty,
+                'qty' => (int) $this->qty,
             ]);
 
             session()->flash('success', 'Product model updated successfully.');

@@ -21,6 +21,7 @@
                     <th>পণ্যের নাম</th>
                     <th>মডেল নাম</th>
                     <th>পরিমাণ</th>
+                    <th>মোট ক্রয়</th>
                     <th>তৈরির সময়</th>
                     <th>অ্যাকশন</th>
                 </tr>
@@ -32,6 +33,7 @@
                         <td>{{ $model->product->product_name }}</td>
                         <td>{{ $model->model_name }}</td>
                         <td>{{ $model->qty }}</td>
+                        <td>{{ $model->purchases_count ?? 0 }}</td>
                         <td>{{ $model->created_at->format('d-m-Y') }}</td>
                         <td>
 

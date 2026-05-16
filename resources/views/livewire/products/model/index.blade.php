@@ -34,6 +34,7 @@
                     <th>Product</th>
                     <th>Model Name</th>
                     <th>Quantity</th>
+                    <th>Total Purchased</th>
                     <th class="text-right">Actions</th>
                 </tr>
             </thead>
@@ -44,6 +45,7 @@
                     <td>{{ $model->product->product_name ?? '-' }}</td>
                     <td>{{ $model->model_name }}</td>
                     <td>{{ $model->qty }}</td>
+                    <td>{{ $model->purchases_count ?? 0 }}</td>
                     <td class="flex justify-end gap-2">
                         <button wire:click="edit({{ $model->id }})" class="btn btn-xs btn-warning">Edit</button>
                         <button wire:click="delete({{ $model->id }})"

@@ -156,8 +156,10 @@
                 $('#inventory_section').hide();
 
                 if (productId) {
+                    const getModelsUrl = `{{ route('purchases.models', ['productId' => ':productId']) }}`.replace(':productId', productId);
+
                     $.ajax({
-                        url: `/purchases/models/${productId}`,
+                        url: getModelsUrl,
                         method: 'GET',
                         success: function(models) {
                             if (models.length > 0) {

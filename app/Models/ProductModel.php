@@ -14,6 +14,15 @@ class ProductModel extends Model
          'model_name',
          'qty',
      ];
+
+     protected $casts = [
+         'qty' => 'integer',
+     ];
+
+     public function purchases()
+     {
+         return $this->hasMany(Purchase::class, 'model_id');
+     }
  
      public function product()
      {

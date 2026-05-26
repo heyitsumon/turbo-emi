@@ -32,6 +32,11 @@
             <input type="number" name="qty" class="form-control" min="0" value="0" required>
         </div>
 
+        <div class="mb-3">
+            <label for="purchase_price">Purchase Price</label>
+            <input type="number" name="purchase_price" class="form-control" min="0" step="0.01" value="0" required>
+        </div>
+
         <button class="btn btn-primary">Add Model</button>
     </form>
 </div>

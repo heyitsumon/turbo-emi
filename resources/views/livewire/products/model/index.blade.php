@@ -34,6 +34,8 @@
                     <th>Product</th>
                     <th>Model Name</th>
                     <th>Quantity</th>
+                    <th>Purchase Price</th>
+                    <th>Stock Value</th>
                     <th>Total Purchased</th>
                     <th class="text-right">Actions</th>
                 </tr>
@@ -45,6 +47,8 @@
                     <td>{{ $model->product->product_name ?? '-' }}</td>
                     <td>{{ $model->model_name }}</td>
                     <td>{{ $model->qty }}</td>
+                    <td>{{ number_format($model->purchase_price, 2) }}</td>
+                    <td>{{ number_format($model->total_value, 2) }}</td>
                     <td>{{ $model->purchases_count ?? 0 }}</td>
                     <td class="flex justify-end gap-2">
                         <button wire:click="edit({{ $model->id }})" class="btn btn-xs btn-warning">Edit</button>
@@ -56,11 +60,15 @@
                 </tr>
             @empty
                 <tr>
-                    <td colspan="4" class="text-center text-gray-400">No models found.</td>
+                    <td colspan="8" class="text-center text-gray-400">No models found.</td>
                 </tr>
             @endforelse
             </tbody>
         </table>
+    </div>
+
+    <div class="mt-4 text-right text-lg font-semibold">
+        Total Stock Value: ৳{{ number_format($totalStockValue, 2) }}
     </div>
 
     {{-- Pagination --}}
@@ -89,6 +97,10 @@
                 <input type="number" wire:model="qty" placeholder="Quantity"
                        class="input input-bordered w-full mb-2" min="0">
                 @error('qty') <span class="text-error">{{ $message }}</span> @enderror
+
+                <input type="number" wire:model="purchase_price" placeholder="Purchase Price"
+                       class="input input-bordered w-full mb-2" min="0" step="0.01" >
+                @error('purchase_price') <span class="text-error">{{ $message }}</span> @enderror
 
                 <div class="modal-action">
                     @if($model_id)

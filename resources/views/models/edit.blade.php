@@ -34,6 +34,11 @@
             <input type="number" name="qty" class="form-control" value="{{ $model->qty ?? 0 }}" min="0" required>
         </div>
 
+        <div class="mb-3">
+            <label for="purchase_price">ক্রয় মূল্য</label>
+            <input type="number" name="purchase_price" class="form-control" value="{{ $model->purchase_price ?? 0 }}" min="0" step="0.01" required>
+        </div>
+
         <button class="btn btn-primary">আপডেট করুন</button>
     </form>
 </div>

@@ -21,6 +21,8 @@
                     <th>পণ্যের নাম</th>
                     <th>মডেল নাম</th>
                     <th>পরিমাণ</th>
+                    <th>ক্রয় মূল্য</th>
+                    <th>স্টক মূল্য</th>
                     <th>মোট ক্রয়</th>
                     <th>তৈরির সময়</th>
                     <th>অ্যাকশন</th>
@@ -33,10 +35,11 @@
                         <td>{{ $model->product->product_name }}</td>
                         <td>{{ $model->model_name }}</td>
                         <td>{{ $model->qty }}</td>
+                        <td>{{ number_format($model->purchase_price, 2) }}</td>
+                        <td>{{ number_format($model->total_value, 2) }}</td>
                         <td>{{ $model->purchases_count ?? 0 }}</td>
                         <td>{{ $model->created_at->format('d-m-Y') }}</td>
                         <td>
-
                             @can('product-model-edit')
                                 <a href="{{ route('models.edit', $model->id) }}" class="btn btn-sm btn-primary">এডিট</a>
                             @endcan
@@ -49,12 +52,11 @@
                                     <button class="btn btn-sm btn-danger">ডিলিট</button>
                                 </form>
                             @endcan
-
                         </td>
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="5" class="text-center">কোনো মডেল পাওয়া যায়নি।</td>
+                        <td colspan="9" class="text-center">কোনো মডেল পাওয়া যায়নি।</td>
                     </tr>
                 @endforelse
             </tbody>

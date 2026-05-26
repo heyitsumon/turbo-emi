@@ -15,6 +15,7 @@ class Index extends Component
     public $product_id;
     public $model_name;
     public $qty = 0;
+    public $purchase_price = '';
     public $isOpen = false;
     public $search = '';
     public $perPage = 10;
@@ -25,6 +26,7 @@ class Index extends Component
         'product_id' => 'required|exists:products,id',
         'model_name' => 'required|string|max:255',
         'qty' => 'required|integer|min:0',
+        'purchase_price' => 'required|numeric|min:0',
     ];
 
     public function mount()
@@ -48,7 +50,11 @@ class Index extends Component
             ->orderBy('id','desc')
             ->paginate($this->perPage);
 
-        return view('livewire.products.model.index', compact('models'));
+        $totalStockValue = $models->sum(function ($model) {
+            return $model->qty * $model->purchase_price;
+        });
+
+        return view('livewire.products.model.index', compact('models', 'totalStockValue'));
     }
 
     public function create()
@@ -73,6 +79,7 @@ class Index extends Component
         $this->product_id = '';
         $this->model_name = '';
         $this->qty = 0;
+        $this->purchase_price = '';
         $this->closeModal();
     }
 
@@ -84,6 +91,7 @@ class Index extends Component
             'product_id' => (int) $this->product_id,
             'model_name' => $this->model_name,
             'qty' => (int) $this->qty,
+            'purchase_price' => (float) $this->purchase_price,
         ]);
 
         session()->flash('success', 'Product model created successfully.');
@@ -97,6 +105,7 @@ class Index extends Component
         $this->product_id = $model->product_id;
         $this->model_name = $model->model_name;
         $this->qty = $model->qty;
+        $this->purchase_price = $model->purchase_price ?? 0;
 
         $this->openModal();
     }
@@ -118,6 +127,7 @@ class Index extends Component
                 'product_id' => (int) $this->product_id,
                 'model_name' => $this->model_name,
                 'qty' => (int) $this->qty,
+                'purchase_price' => (float) $this->purchase_price,
             ]);
 
             session()->flash('success', 'Product model updated successfully.');

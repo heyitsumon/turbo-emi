@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Installment;
+use App\Models\InstallmentPayment;
 use App\Models\Purchase;
 use Illuminate\Http\Request;
 
@@ -31,16 +32,12 @@ class HomeController extends Controller
     // Get all installments
     $installments = Installment::all();
 
-    // Calculate totals
-    $totalPurchase = $purchases->sum('total_price');
-    
-    $totalPaid = $installments->where('status', 'paid')->sum('amount');
-    $totalDue = $totalPurchase - $totalPaid;
+    // Calculate totals using the real receivable and actual payment totals.
+    $totalPurchase = Purchase::sum('net_price');
+    $totalPaid = InstallmentPayment::sum('amount');
+    $totalDue = max($totalPurchase - $totalPaid, 0);
 
-    // Calculate total profit (sales_price - total_price for each purchase)
-    $totalProfit = $purchases->sum(function ($purchase) {
-        return $purchase->sales_price - $purchase->total_price;
-    });
+    $totalProfit = Purchase::sum('sales_price') - Purchase::sum('net_price');
 
     return view('home', compact(
         'totalPurchase',

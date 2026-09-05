@@ -18,8 +18,10 @@ class Dashboard extends Component
         $totalLocations = Location::count();
 
         // Financials
-        $totalSales = Purchase::sum('sales_price');
-        $totalNet   = Purchase::sum('net_price');
+        $totalSales = Purchase::sum('net_price');
+        $totalNet   = Purchase::sum('sales_price');
+
+        
 
         $profits = $totalSales - $totalNet;
         

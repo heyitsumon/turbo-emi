@@ -72,21 +72,23 @@
                 @enderror
             </div>
 
-            <div class="mb-3">
-                <label for="sales_price" class="form-label">Net Price</label>
-                <input type="number" name="sales_price" class="form-control" required step="0.01" min="0">
-                @error('sales_price')
+            <div class="mb-3"> 
+                <label for="net_price" class="form-label">Sales Price</label>
+                <input type="number" name="net_price" class="form-control" required min="0" placeholder="1000">
+                @error('net_price')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
 
             <div class="mb-3">
-                <label for="net_price" class="form-label">Sales Price</label>
-                <input type="number" name="net_price" class="form-control" required step="0.01" min="0">
-                @error('net_price')
+                <label for="sales_price" class="form-label">Net Price</label>
+                <input type="number" name="sales_price" class="form-control" required min="0" placeholder="800">
+                
+                @error('sales_price')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
+           
 
             <div class="mb-3">
                 <label for="down_price" class="form-label">ডাউন পেমেন্ট (Down Price)</label>
@@ -95,7 +97,6 @@
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
-
 
 
             <div class="mb-3">

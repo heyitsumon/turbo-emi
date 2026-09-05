@@ -19,7 +19,7 @@ class Dashboard extends Component
 
         // Financials
         $totalSales = Purchase::sum('net_price');
-        $totalNet   = Purchase::sum('sales_price');
+        $totalNet   = Purchase::sum('net_price');
 
         
 

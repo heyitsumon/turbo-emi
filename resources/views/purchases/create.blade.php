@@ -103,7 +103,7 @@
             </div>
 
 
-            <hr>
+    
 
             <div class="mb-3">
                 <label for="emi_plan" class="form-label">EMI Plan (মাস)</label>

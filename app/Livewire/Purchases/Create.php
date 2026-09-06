@@ -124,6 +124,7 @@ class Create extends Component
                             ->orWhere('customer_phone', 'like', '%' . $this->customerSearch . '%');
                     });
                 })
+                ->whereIn('location_id', auth()->user()->accessibleLocationIds())
                 ->orderBy('customer_name')
                 ->limit(20)
                 ->get(),

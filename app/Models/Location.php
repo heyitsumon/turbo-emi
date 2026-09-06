@@ -10,6 +10,13 @@ class Location extends Model
         'name'
     ];
 
+    public function users()
+    {
+        return $this->belongsToMany(User::class)
+            ->withPivot('is_owner')
+            ->withTimestamps();
+    }
+
     // multiple customer
     public function customers()
     {

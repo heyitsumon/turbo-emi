@@ -9,6 +9,13 @@
 
             <!-- Desktop Links -->
             <div class="hidden md:flex space-x-2">
+                @if($locations->isNotEmpty())
+                    <select wire:model.live="activeLocationId" wire:change="switchLocation($event.target.value)" class="select select-sm select-bordered max-w-48" aria-label="Active shop">
+                        @foreach($locations as $location)
+                            <option value="{{ $location->id }}">{{ $location->name }}</option>
+                        @endforeach
+                    </select>
+                @endif
                 <a wire:navigate href="{{ route('dashboard') }}" wire:click="$set('currentRoute','dashboard')"
                    class="btn btn-sm {{ $currentRoute == 'dashboard' ? 'bg-primary text-white' : 'btn-ghost' }}">
                     Dashboard

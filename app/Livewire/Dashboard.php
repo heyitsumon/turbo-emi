@@ -18,17 +18,13 @@ class Dashboard extends Component
         $totalLocations = Location::count();
 
         // Financials
-        $totalSales = Purchase::sum('net_price');
+        // sales_price = original sale value
+        // net_price = actual amount receivable after discount / final settlement
+        $totalSales = Purchase::sum('sales_price');
         $totalNet   = Purchase::sum('net_price');
-
-        
-
-        $profits = $totalSales - $totalNet;
-        
-        $totalDown  = Purchase::sum('down_price');
         $totalPaid  = InstallmentPayment::sum('amount');
 
-        $totalDue = max(($totalNet - $totalDown) - $totalPaid, 0);
+        $totalDue = max($totalNet - $totalPaid, 0);
         $totalProfit = $totalSales - $totalNet;
 
         // Chart Data (Last 6 months)

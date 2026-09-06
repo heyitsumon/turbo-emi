@@ -19,6 +19,7 @@ use App\Livewire\Locations\Index as LocationsIndex;
 use App\Livewire\Products\Index as ProductsIndex;
 use App\Livewire\Products\Model\Index as ModelIndex;
 use App\Livewire\Purchases\Index as PurchasesIndex;
+use App\Livewire\Purchases\Create as PurchaseCreate;
 use App\Livewire\Roles\Index as RolesIndex;
 use App\Livewire\Users\Index as UsersIndex;
 use Illuminate\Support\Facades\Auth;
@@ -65,6 +66,9 @@ Route::get('/customers/create', [CustomerController::class, 'create'])->name('cu
 Route::post('/customers/create', [CustomerController::class, 'store'])->name('customers.store')->middleware('auth');
 Route::get('/customers/{id}/emi-plans', [Index::class, 'customerEmiPlans'])->name('customers.emi_plans')->middleware('auth');
 
+Route::get('/purchases/create', PurchaseCreate::class)
+    ->name('purchases.create')
+    ->middleware(['auth', 'permission:purchase-create']);
 Route::resource('purchases', PurchaseController::class);
 Route::resource('models', ProductModelController::class);
 

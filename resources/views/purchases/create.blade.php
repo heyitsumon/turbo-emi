@@ -1,38 +1,16 @@
 @extends('layouts.app')
-
 @section('title', 'Create Purchase')
 
-@section('styles')
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-@endsection
-
-@section('content')
-    <div class="container">
-        <h2 class="mb-4">নতুন ক্রয় যুক্ত করুন..</h2>
-
-        @if ($errors->any())
-            <div class="alert alert-danger">
+                <input type="number" name="sales_price" class="form-control" required step="0.01" min="0" placeholder="1000">
+                @error('sales_price')
                 <strong>ত্রুটি!</strong> নিচের সমস্যাগুলো ঠিক করুন:
                 <ul class="mb-0">
                     @foreach ($errors->all() as $error)
                         <li>{{ $error }}</li>
                     @endforeach
-                </ul>
-            </div>
-        @endif
-
-        <form id="purchaseForm" action="{{ route('purchases.store') }}" method="POST">
-            @csrf
-
-            <div class="mb-3">
-                <label for="customer_id" class="form-label">গ্রাহক (Customer)</label>
-                <select id="customer_id" name="customer_id" class="form-control select2" required>
-                    <option value="">গ্রাহক নির্বাচন করুন</option>
-                </select>
-                @error('customer_id')
                     <small class="text-danger">{{ $message }}</small>
-                @enderror
-            </div>
+                <input type="number" name="net_price" class="form-control" required step="0.01" min="0" placeholder="800">
+                @error('net_price')
 
             <div class="mb-3">
                 <label for="product_id" class="form-label">পণ্য (Product)</label>
@@ -72,41 +50,18 @@
                 @enderror
             </div>
 
-<<<<<<< HEAD
             <div class="mb-3">
                 <label for="sales_price" class="form-label">Sales Price</label>
-              
-
-
-
-                 <input type="number" name="net_price" class="form-control" required step="0.01" min="0" placeholder="1000">
-                @error('net_price')
-=======
-            <div class="mb-3"> 
-                <label for="net_price" class="form-label">Sales Price</label>
-                <input type="number" name="net_price" class="form-control" required min="0" placeholder="1000">
-                @error('net_price')
+                <input type="number" name="sales_price" class="form-control" required step="0.01" min="0" placeholder="1000">
+                @error('sales_price')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div>
 
             <div class="mb-3">
-                <label for="sales_price" class="form-label">Net Price</label>
-                <input type="number" name="sales_price" class="form-control" required min="0" placeholder="800">
-                
-                @error('sales_price')
->>>>>>> f8454448e5d0a0ff632c558be539f140e635a40f
-                    <small class="text-danger">{{ $message }}</small>
-                @enderror
-
-
-            </div>
-           
-
-            <div class="mb-3"> 
                 <label for="net_price" class="form-label">Net Price</label>
-                 <input type="number" name="sales_price" class="form-control" required step="0.01" min="0" placeholder="800">
-                @error('sales_price')
+                <input type="number" name="net_price" class="form-control" required step="0.01" min="0" placeholder="800">
+                @error('net_price')
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
             </div> 
@@ -120,11 +75,6 @@
             </div>
 
 
-<<<<<<< HEAD
-    
-
-=======
->>>>>>> f8454448e5d0a0ff632c558be539f140e635a40f
             <div class="mb-3">
                 <label for="emi_plan" class="form-label">EMI Plan (মাস)</label>
                 <input type="number" name="emi_plan" class="form-control" required min="1">

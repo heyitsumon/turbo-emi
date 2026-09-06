@@ -20,8 +20,6 @@
     <div class="card bg-base-100 shadow p-4 mb-6">
         <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
             <div class="form-control mb-3">
-                <label class="label font-semibold">{{ __('ui.location_name') }}</label>
-                <input type="text" wire:model.defer="name" class="input input-bordered w-full" placeholder="{{ __('ui.enter_location') }}">
                 @error('name') <span class="text-error text-sm">{{ $message }}</span> @enderror
             </div>
 

@@ -69,7 +69,7 @@
 </div>
 
 <!-- ================= CHART ================= -->
-<div class="card bg-base-100 shadow">
+<div wire:ignore class="card bg-base-100 shadow">
     <div class="card-body">
         <h3 class="card-title">{{ __('ui.monthly_customers_purchases') }}</h3>
         <canvas id="dashboardChart" height="120"></canvas>
@@ -80,32 +80,8 @@
 </div>
 
 
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@assets
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+@endassets
 
-<script>
-const ctx = document.getElementById('dashboardChart');
-if (ctx) {
-    new Chart(ctx, {
-        type: 'line',
-        data: {
-            labels: {!! json_encode($chartLabels) !!},
-            datasets: [
-                {
-                    label: @json(__('ui.customers_chart')),
-                    data: {!! json_encode($customerChartData) !!},
-                    tension: 0.4
-                },
-                {
-                    label: @json(__('ui.purchases_chart')),
-                    data: {!! json_encode($purchaseChartData) !!},
-                    tension: 0.4
-                }
-            ]
-        },
-        options: {
-            responsive: true,
-            scales: { y: { beginAtZero: true } }
-        }
-    });
-}
-</script>
+

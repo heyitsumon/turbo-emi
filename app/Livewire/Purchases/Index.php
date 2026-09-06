@@ -3,41 +3,44 @@
 namespace App\Livewire\Purchases;
 
 use Livewire\Component;
-use App\Models\Customer;
 use App\Models\Product;
 use App\Models\ProductModel;
 use App\Models\Purchase;
-use App\Models\Installment;
-use App\Models\InstallmentPayment;
-use Carbon\Carbon;
-use Illuminate\Support\Facades\DB;
 use Livewire\WithPagination;
 
 
 class Index extends Component
 {
- 
-  public $product_id;
-    public $product_model_id;
-    public $products = [];
-    public $models = [];
+    use WithPagination;
 
-    public function mount()
+    public string $search = '';
+    public int $perPage = 25;
+
+    public function updatedSearch(): void
     {
-        $this->products = Product::all();
-    }
-
-    public function updatedProductId($value)
-    {
-        $this->models = ProductModel::where('product_id', $value)->get();
-        $this->product_model_id = null;
-
-        $this->dispatch('refreshSelect2'); // trigger JS to refresh Select2
+        $this->resetPage();
     }
 
     public function render()
     {
-        return view('livewire.purchases.index');
+        $search = trim($this->search);
+
+        $purchases = Purchase::query()
+            ->with(['customer.location', 'product', 'model'])
+            ->when($search !== '', function ($query) use ($search) {
+                $query->whereHas('customer', function ($customerQuery) use ($search) {
+                    $customerQuery
+                        ->where('customer_name', 'like', "%{$search}%")
+                        ->orWhere('customer_phone', 'like', "%{$search}%")
+                        ->orWhere('customer_id', 'like', "%{$search}%");
+                })->orWhereHas('product', function ($productQuery) use ($search) {
+                    $productQuery->where('product_name', 'like', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate($this->perPage);
+
+        return view('livewire.purchases.index', compact('purchases'));
     }
 
 }

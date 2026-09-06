@@ -20,11 +20,15 @@
     <div class="card bg-base-100 shadow p-4 mb-6">
         <form wire:submit.prevent="{{ $isEdit ? 'update' : 'store' }}">
             <div class="form-control mb-3">
+                <label class="label">
+                    <span class="label-text">{{ __('ui.location_name') ?? 'Location Name' }}</span>
+                </label>
+                <input type="text" wire:model.defer="name" class="input input-bordered w-full" placeholder="Enter location name">
                 @error('name') <span class="text-error text-sm">{{ $message }}</span> @enderror
             </div>
 
             <div class="flex gap-2">
-                <button class="btn btn-primary">
+                <button type="submit" class="btn btn-primary">
                     {{ $isEdit ? __('ui.update') : __('ui.save') }}
                 </button>
                 @if($isEdit)
@@ -35,7 +39,6 @@
             </div>
         </form>
     </div>
-    <h1>test</h1>
 
     <!-- Table Card -->
     <div class="card bg-base-100 shadow">
@@ -54,10 +57,10 @@
                             <td>{{ $key + 1 }}</td>
                             <td>{{ $location->name }}</td>
                             <td class="text-right flex justify-end gap-2">
-                                <button wire:click="edit({{ $location->id }})"
+                                <button type="button" wire:click="edit({{ $location->id }})"
                                         class="btn btn-sm btn-warning">{{ __('ui.edit') }}</button>
 
-                                <button wire:click="delete({{ $location->id }})"
+                                <button type="button" wire:click="delete({{ $location->id }})"
                                         onclick="confirm('Are you sure to delete this location?') || event.stopImmediatePropagation()"
                                         class="btn btn-sm btn-error">{{ __('ui.delete') }}</button>
                             </td>

@@ -72,6 +72,7 @@
                 @enderror
             </div>
 
+<<<<<<< HEAD
             <div class="mb-3">
                 <label for="sales_price" class="form-label">Sales Price</label>
               
@@ -80,11 +81,27 @@
 
                  <input type="number" name="net_price" class="form-control" required step="0.01" min="0" placeholder="1000">
                 @error('net_price')
+=======
+            <div class="mb-3"> 
+                <label for="net_price" class="form-label">Sales Price</label>
+                <input type="number" name="net_price" class="form-control" required min="0" placeholder="1000">
+                @error('net_price')
+                    <small class="text-danger">{{ $message }}</small>
+                @enderror
+            </div>
+
+            <div class="mb-3">
+                <label for="sales_price" class="form-label">Net Price</label>
+                <input type="number" name="sales_price" class="form-control" required min="0" placeholder="800">
+                
+                @error('sales_price')
+>>>>>>> f8454448e5d0a0ff632c558be539f140e635a40f
                     <small class="text-danger">{{ $message }}</small>
                 @enderror
 
 
             </div>
+           
 
             <div class="mb-3"> 
                 <label for="net_price" class="form-label">Net Price</label>
@@ -103,8 +120,11 @@
             </div>
 
 
+<<<<<<< HEAD
     
 
+=======
+>>>>>>> f8454448e5d0a0ff632c558be539f140e635a40f
             <div class="mb-3">
                 <label for="emi_plan" class="form-label">EMI Plan (মাস)</label>
                 <input type="number" name="emi_plan" class="form-control" required min="1">

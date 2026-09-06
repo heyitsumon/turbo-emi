@@ -23,9 +23,15 @@ class Dashboard extends Component
         // Financials
         // sales_price = original sale value
         // net_price = actual amount receivable after discount / final settlement
+<<<<<<< HEAD
         $totalSales = (clone $purchaseQuery)->sum('sales_price');
         $totalNet   = (clone $purchaseQuery)->sum('net_price');
         $totalPaid  = InstallmentPayment::whereHas('installment.purchase.customer', fn ($query) => $query->whereIn('location_id', $locationIds))->sum('amount');
+=======
+        $totalSales = Purchase::sum('sales_price');
+        $totalNet   = Purchase::sum('net_price');
+        $totalPaid  = InstallmentPayment::sum('amount');
+>>>>>>> f8454448e5d0a0ff632c558be539f140e635a40f
 
         $totalDue = max($totalNet - $totalPaid, 0);
         $totalProfit = $totalSales - $totalNet;

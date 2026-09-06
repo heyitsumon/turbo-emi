@@ -36,6 +36,16 @@ Route::post('/logout', function () {
     return redirect('/login'); // Redirect after logout
 });
 
+Route::post('/locale', function () {
+    $locale = request()->validate([
+        'locale' => ['required', 'in:en,bn'],
+    ])['locale'];
+
+    session(['locale' => $locale]);
+
+    return back();
+})->name('locale.switch');
+
 // routes/web.php
 Route::get('/locations', LocationsIndex::class)
     ->name('locations.index');

@@ -13,6 +13,18 @@ class User extends Authenticatable
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable, HasRoles;
 
+    public function locations()
+    {
+        return $this->belongsToMany(Location::class)
+            ->withPivot('is_owner')
+            ->withTimestamps();
+    }
+
+    public function accessibleLocationIds(): array
+    {
+        return $this->locations()->pluck('locations.id')->all();
+    }
+
     /**
      * The attributes that are mass assignable.
      *

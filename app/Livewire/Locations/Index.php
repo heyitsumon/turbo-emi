@@ -3,6 +3,7 @@
 namespace App\Livewire\Locations;
 
 use App\Models\Location;
+use Illuminate\Support\Facades\Auth;
 use Livewire\Component;
 use Livewire\WithPagination;
 
@@ -25,9 +26,10 @@ class Index extends Component
     {
         $this->validate();
 
-        Location::create([
+        $location = Location::create([
             'name' => $this->name,
         ]);
+        $location->users()->attach(Auth::id(), ['is_owner' => true]);
 
         $this->resetInput();
         $this->resetPage(); // important
@@ -37,7 +39,7 @@ class Index extends Component
 
     public function edit($id)
     {
-        $location = Location::findOrFail($id);
+        $location = $this->accessibleLocations()->findOrFail($id);
 
         $this->locationId = $id;
         $this->name = $location->name;
@@ -48,7 +50,7 @@ class Index extends Component
     {
         $this->validate();
 
-        Location::where('id', $this->locationId)->update([
+        $this->accessibleLocations()->whereKey($this->locationId)->update([
             'name' => $this->name,
         ]);
 
@@ -59,7 +61,7 @@ class Index extends Component
 
     public function delete($id)
     {
-        Location::findOrFail($id)->delete();
+        $this->accessibleLocations()->findOrFail($id)->delete();
         $this->resetPage(); // fix pagination bug
 
         session()->flash('success', 'Location deleted successfully');
@@ -75,7 +77,12 @@ class Index extends Component
     public function render()
     {
         return view('livewire.locations.index', [
-            'locations' => Location::latest()->paginate($this->perPage),
+            'locations' => $this->accessibleLocations()->latest()->paginate($this->perPage),
         ]);
+    }
+
+    private function accessibleLocations()
+    {
+        return Auth::user()->locations();
     }
 }

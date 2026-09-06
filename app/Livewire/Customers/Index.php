@@ -55,7 +55,7 @@ class Index extends Component
     public function openModal($id = null)
     {
         if ($id) {
-            $this->viewCustomerData = Customer::with('location')->findOrFail($id);
+            $this->viewCustomerData = $this->accessibleCustomers()->with('location')->findOrFail($id);
             $this->showModal = true;
         }
     }
@@ -85,7 +85,7 @@ class Index extends Component
             'customer_phone2'   => 'nullable|string|max:20',
             'customer_image'    => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'landlord_name'     => 'nullable|string|max:255',
-            'location_id'       => 'required|exists:locations,id',
+            'location_id'       => 'required|in:' . implode(',', auth()->user()->accessibleLocationIds()),
             'location_details'  => 'nullable|string|max:255',
         ];
     }
@@ -115,14 +115,15 @@ class Index extends Component
     public function render()
     {
         // Cache locations for faster queries
-        $locations = Cache::remember('locations_list', 3600, function () {
-            return Location::select('id', 'name')->get();
+        $locations = Cache::remember('locations_list_' . auth()->id(), 3600, function () {
+            return auth()->user()->locations()->select('locations.id', 'locations.name')->get();
         });
 
         $search = trim($this->search);
 
         // Base query
-        $customersQuery = Customer::with('location:id,name');
+        $customersQuery = Customer::with('location:id,name')
+            ->whereIn('location_id', auth()->user()->accessibleLocationIds());
 
         // Show trashed or active customers based on toggle
         if ($this->showDeleted) {
@@ -207,7 +208,7 @@ class Index extends Component
 
     public function edit($id)
     {
-        $customer = Customer::findOrFail($id);
+        $customer = $this->accessibleCustomers()->findOrFail($id);
 
         $this->customer_primary_id = $customer->id;
         $this->customer_name       = $customer->customer_name;
@@ -228,7 +229,7 @@ class Index extends Component
     {
         $this->validate();
 
-        $customer = Customer::findOrFail($this->customer_primary_id);
+        $customer = $this->accessibleCustomers()->findOrFail($this->customer_primary_id);
 
         $imagePath = $customer->customer_image;
 
@@ -262,7 +263,7 @@ class Index extends Component
     // Soft Delete (active customer)
     public function delete($id)
     {
-        $customer = Customer::findOrFail($id); // Only active
+        $customer = $this->accessibleCustomers()->findOrFail($id); // Only active
         $customer->delete();
         sweetalert()->success('Customer soft deleted successfully.');
         $this->resetPage();
@@ -271,7 +272,7 @@ class Index extends Component
     // Restore (only trashed customer)
     public function restore($id)
     {
-        $customer = Customer::onlyTrashed()->findOrFail($id);
+        $customer = $this->accessibleCustomers()->onlyTrashed()->findOrFail($id);
         $customer->restore();
         sweetalert()->success('Customer restored successfully.');
         $this->resetPage();
@@ -280,7 +281,7 @@ class Index extends Component
     // Force Delete (only trashed customer)
     public function forceDelete($id)
     {
-        $customer = Customer::onlyTrashed()->findOrFail($id);
+        $customer = $this->accessibleCustomers()->onlyTrashed()->findOrFail($id);
 
         // Delete image from storage if exists
         if ($customer->customer_image) {
@@ -292,10 +293,15 @@ class Index extends Component
         $this->resetPage();
     }
 
+    private function accessibleCustomers()
+    {
+        return Customer::whereIn('location_id', auth()->user()->accessibleLocationIds());
+    }
+
 
     public function customerEmiPlans($id)
     {
-        $customer = Customer::with('purchases.installments')->findOrFail($id);
+        $customer = $this->accessibleCustomers()->with('purchases.installments')->findOrFail($id);
 
         $paymentHistory = InstallmentPayment::with('installment.purchase.product')
             ->whereHas('installment.purchase', function ($query) use ($id) {

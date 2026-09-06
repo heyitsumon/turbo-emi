@@ -27,11 +27,11 @@ class Create extends Component
 
     public function mount($customerId = null)
     {
-        $this->locations = Location::all();
+        $this->locations = auth()->user()->locations()->orderBy('name')->get();
 
         if ($customerId) {
             $this->editId = $customerId;
-            $customer = Customer::findOrFail($customerId);
+            $customer = Customer::whereIn('location_id', auth()->user()->accessibleLocationIds())->findOrFail($customerId);
 
             $this->customer_name = $customer->customer_name;
             $this->customer_id = $customer->customer_id;
@@ -53,7 +53,7 @@ class Create extends Component
             'customer_phone2' => 'required|string|unique:customers,customer_phone2,' . $this->editId,
             'customer_image' => 'nullable|image|mimes:jpg,jpeg,png|max:2048',
             'landlord_name' => 'nullable|string|max:255',
-            'location_id' => 'required|exists:locations,id',
+            'location_id' => 'required|in:' . implode(',', auth()->user()->accessibleLocationIds()),
             'location_details' => 'nullable|string|max:255',
         ];
     }
@@ -92,7 +92,7 @@ class Create extends Component
     public function render()
     {
         return view('livewire.customers.create', [
-            'locations' => Location::all(),
+            'locations' => auth()->user()->locations()->orderBy('name')->get(),
         ]);
     }
 }

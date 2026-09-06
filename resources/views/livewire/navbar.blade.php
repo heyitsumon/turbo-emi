@@ -9,55 +9,62 @@
 
             <!-- Desktop Links -->
             <div class="hidden md:flex space-x-2">
+                @if($locations->isNotEmpty())
+                    <select wire:model.live="activeLocationId" wire:change="switchLocation($event.target.value)" class="select select-sm select-bordered max-w-48" aria-label="Active shop">
+                        @foreach($locations as $location)
+                            <option value="{{ $location->id }}">{{ $location->name }}</option>
+                        @endforeach
+                    </select>
+                @endif
                 <a wire:navigate href="{{ route('dashboard') }}" wire:click="$set('currentRoute','dashboard')"
                    class="btn btn-sm {{ $currentRoute == 'dashboard' ? 'bg-primary text-white' : 'btn-ghost' }}">
-                    Dashboard
+                        {{ __('ui.dashboard') }}
                 </a>
 
                 @can('customer-list')
                     <a wire:navigate href="{{ route('customers.index') }}" wire:click="$set('currentRoute','customers.index')"
                        class="btn btn-sm {{ $currentRoute == 'customers.index' ? 'bg-primary text-white' : 'btn-ghost' }}">
-                        Customers
+                        {{ __('ui.customers') }}
                     </a>
                 @endcan
 
                 @can('location-list')
                     <a wire:navigate href="{{ route('locations.index') }}" wire:click="$set('currentRoute','locations.index')"
                        class="btn btn-sm {{ $currentRoute == 'locations.index' ? 'bg-primary text-white' : 'btn-ghost' }}">
-                        Locations
+                        {{ __('ui.locations') }}
                     </a>
                 @endcan
 
                 @can('product-list')
                     <a wire:navigate href="{{ route('products.index') }}" wire:click="$set('currentRoute','products.index')"
                        class="btn btn-sm {{ $currentRoute == 'products.index' ? 'bg-primary text-white' : 'btn-ghost' }}">
-                        Products
+                        {{ __('ui.products') }}
                     </a>
                 @endcan
 
                 @can('product-model-list')
                     <a wire:navigate href="{{ route('products.model') }}" wire:click="$set('currentRoute','products.model')"
                        class="btn btn-sm {{ $currentRoute == 'products.model' ? 'bg-primary text-white' : 'btn-ghost' }}">
-                        Product Models
+                        {{ __('ui.product_models') }}
                     </a>
                 @endcan
 
                 @can('user-list')
                     <a wire:navigate href="{{ route('users.index') }}" wire:click="$set('currentRoute','users.index')"
                        class="btn btn-sm {{ $currentRoute == 'users.index' ? 'bg-primary text-white' : 'btn-ghost' }}">
-                        Users
+                        {{ __('ui.users') }}
                     </a>
                 @endcan
 
                 @can('role-list')
                     <a wire:navigate href="{{ route('roles.index') }}" wire:click="$set('currentRoute','roles.index')"
                        class="btn btn-sm {{ $currentRoute == 'roles.index' ? 'bg-primary text-white' : 'btn-ghost' }}">
-                        User Roles
+                        {{ __('ui.roles') }}
                     </a>
                 @endcan
 
                 <div class="dropdown dropdown-end">
-                    <label tabindex="0" class="btn btn-sm btn-outline mr-2">Theme</label>
+                    <label tabindex="0" class="btn btn-sm btn-outline mr-2">{{ __('ui.theme') }}</label>
                     <ul tabindex="0" class="dropdown-content menu p-2 shadow bg-base-100 rounded-box w-56">
                         @for ($i = 1; $i <= 12; $i++)
                             <li>
@@ -71,6 +78,11 @@
                         @endfor
                     </ul>
                 </div>
+
+                <select wire:model.live="locale" wire:change="switchLocale($event.target.value)" class="select select-sm select-bordered" aria-label="{{ __('ui.language') }}">
+                    <option value="en">{{ __('ui.english') }}</option>
+                    <option value="bn">{{ __('ui.bangla') }}</option>
+                </select>
             </div>
 
             <!-- Mobile Menu Button -->
@@ -112,6 +124,12 @@
                     </a>
                 </li>
             @endcan
+            <li>
+                <select wire:model.live="locale" wire:change="switchLocale($event.target.value)" class="select select-bordered w-full" aria-label="{{ __('ui.language') }}">
+                    <option value="en">{{ __('ui.english') }}</option>
+                    <option value="bn">{{ __('ui.bangla') }}</option>
+                </select>
+            </li>
             <li class="border-t border-base-200 mt-2 pt-2">
                 <span class="text-sm font-semibold">Theme</span>
             </li>

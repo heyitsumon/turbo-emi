@@ -1,28 +1,28 @@
 <div class="container mx-auto p-4">
 
 @role('admin')
-<h2 class="text-2xl font-bold mb-6">Admin Dashboard</h2>
+<h2 class="text-2xl font-bold mb-6">{{ __('ui.admin_dashboard') }}</h2>
 
 <!-- ================= STATS ================= -->
 <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
 
     <div class="stat bg-base-100 shadow rounded-box">
-        <div class="stat-title">Total Customers</div>
+        <div class="stat-title">{{ __('ui.total_customers') }}</div>
         <div class="stat-value text-primary">{{ $totalCustomers }}</div>
     </div>
 
     <div class="stat bg-base-100 shadow rounded-box">
-        <div class="stat-title">Total Purchases</div>
+        <div class="stat-title">{{ __('ui.total_purchases') }}</div>
         <div class="stat-value text-info">{{ $totalPurchases }}</div>
     </div>
 
     <div class="stat bg-base-100 shadow rounded-box">
-        <div class="stat-title">Total Locations</div>
+        <div class="stat-title">{{ __('ui.total_locations') }}</div>
         <div class="stat-value">{{ $totalLocations }}</div>
     </div>
 
     <div class="stat bg-base-100 shadow rounded-box">
-        <div class="stat-title">Total Sales</div>
+        <div class="stat-title">{{ __('ui.total_sales') }}</div>
         <div class="stat-value text-primary">
             {{ number_format($totalSales) }}
         </div>
@@ -35,7 +35,7 @@
 <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
 
     <div class="stat bg-base-100 shadow rounded-box">
-        <div class="stat-title">Total Paid</div>
+        <div class="stat-title">{{ __('ui.total_paid') }}</div>
         <div class="stat-value text-success">
             {{ number_format($totalPaid) }}
         </div>
@@ -43,7 +43,7 @@
     </div>
 
     <div class="stat bg-base-100 shadow rounded-box">
-        <div class="stat-title">Total Due</div>
+        <div class="stat-title">{{ __('ui.total_due') }}</div>
         <div class="stat-value text-error">
             {{ number_format($totalDue) }}
         </div>
@@ -51,7 +51,7 @@
     </div>
 
     <div class="stat bg-base-100 shadow rounded-box">
-        <div class="stat-title">Total Profit</div>
+        <div class="stat-title">{{ __('ui.total_profit') }}</div>
 
         @if($totalProfit >= 0)
             <div class="stat-value text-success">
@@ -71,7 +71,7 @@
 <!-- ================= CHART ================= -->
 <div class="card bg-base-100 shadow">
     <div class="card-body">
-        <h3 class="card-title">Monthly Customers & Purchases</h3>
+        <h3 class="card-title">{{ __('ui.monthly_customers_purchases') }}</h3>
         <canvas id="dashboardChart" height="120"></canvas>
     </div>
 </div>
@@ -91,12 +91,12 @@ if (ctx) {
             labels: {!! json_encode($chartLabels) !!},
             datasets: [
                 {
-                    label: 'Customers',
+                    label: @json(__('ui.customers_chart')),
                     data: {!! json_encode($customerChartData) !!},
                     tension: 0.4
                 },
                 {
-                    label: 'Purchases',
+                    label: @json(__('ui.purchases_chart')),
                     data: {!! json_encode($purchaseChartData) !!},
                     tension: 0.4
                 }

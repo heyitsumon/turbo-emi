@@ -176,6 +176,16 @@
         <div class="collapse navbar-collapse" id="mainNavbar">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
 
+                <li class="nav-item d-flex align-items-center me-2">
+                    <form method="POST" action="{{ route('locale.switch') }}">
+                        @csrf
+                        <select name="locale" class="form-select form-select-sm" onchange="this.form.submit()" aria-label="{{ __('ui.language') }}">
+                            <option value="en" @selected(app()->getLocale() === 'en')>{{ __('ui.english') }}</option>
+                            <option value="bn" @selected(app()->getLocale() === 'bn')>{{ __('ui.bangla') }}</option>
+                        </select>
+                    </form>
+                </li>
+
                 <!-- Dashboard -->
                 <li class="nav-item">
                     <a href="{{ route('dashboard') }}"
